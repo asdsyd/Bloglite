@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Followers list</h1>
+
+{% for users in results %}
+<div class="container">
+
+  <a class="mr-2 p-1 badge bg-primary text-wrap" style="width: 4rem ; text-decoration: none;" href="{{ url_for('users.user_posts', username=users.username) }}">{{ users.username }}</a>
+
+</div>
+{% endfor %}
+
+
+{% endblock content %}

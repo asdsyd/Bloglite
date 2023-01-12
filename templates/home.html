@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for post in posts.items %}
+
+        <div class="container ">
+            <img class="rounded-circle border border-primary dp m-2" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+            <div class="container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                    <a class="mr-2 p-1 badge bg-primary text-wrap" style="width: 4rem; text-decoration: none;" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
+                            {% if current_user.username != post.author.username %}
+                                {% if current_user.is_following(post.author) %}
+                                <button type="button" class="btn mr-2 p-1 badge btn-outline-danger text-wrap ">
+                                    <a class="link-danger" href="{{ url_for('users.follow', user_id=post.author.id, action='unfollow') }}" style="text-decoration: none;">Unfollow</a> </button>
+                                {% else %}
+                                <button type="button" class="btn mr-2 p-1 badge bg-danger text-wrap">
+                                    <a href="{{ url_for('users.follow', user_id=post.author.id, action='follow') }}" style="text-decoration: none; color: white;">Follow</a> </button>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                            <div class="col">
+                            <small class="text-muted ">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card " style="width: 28rem; border: 0" >
+                <img class="card-img-top" src="{{ url_for('static', filename='post_pics/' + post.image) }}" alt="Post Image">
+                <div class="card-body">
+                    <h3 class="card-title"><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h3>
+                    <p class="card-text">{{ post.content }}</p>
+
+                    {% if current_user.has_liked_post(post) %}
+                    <a href="{{ url_for('posts.like_action', post_id=post.id, action='unlike') }}" class="btn btn-outline-primary">Unlike</a>
+                    {% else %}
+                    <a href="{{ url_for('posts.like_action', post_id=post.id, action='like') }}" class="btn btn-primary">Like</a>
+                    {% endif %}
+                    <div class="btn-bd-primary">
+                        {{ post.likes.count() }} likes
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    {% endfor %}
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1,
+left_current=1, right_current=1) %}
+        {% if page_num %}
+            {% if posts.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+    {% endfor %}
+{% endblock content %}

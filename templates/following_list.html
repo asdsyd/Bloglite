@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Following list</h1>
+
+    {% for users in results %}
+        <div class="container">
+            {{ users.username }}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

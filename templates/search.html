@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% if users is defined %}
+        {% for user in users %}
+            {{ user.username }}
+        {% endfor %}
+    {% endif %}
+
+
+
+{% endblock content %}
