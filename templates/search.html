@@ -1,9 +1,31 @@
 {% extends "layout.html" %}
 {% block content %}
+
+<div>
+    <h4 class="m-3">
+        Search results:
+    </h4>
+</div>
+
     {% if users is defined %}
-        {% for user in users %}
-            {{ user.username }}
-        {% endfor %}
+        {% if users == None  %}
+        <div>
+            <h6 class="text-muted">
+                User does not exists!
+            </h6>
+        </div> 
+        {% else %}
+            {% for user in users %}
+
+            <div class="m-3">
+                <a href="{{url_for('users.user_posts', username=user.username)}}" class="rounded-5 btn btn-outline-primary">{{user.username}}</a>
+            </div>
+        
+
+                
+            {% endfor %}
+        <!-- THIS IS NOT WORKING FIX IT -->
+        {% endif %}
     {% endif %}
 
 

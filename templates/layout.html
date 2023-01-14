@@ -21,7 +21,7 @@
 <body>
 <header class="site-header">
 
-    <nav  class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
+    <nav  class="navbar bg-primary navbar-expand-lg mb-4" data-bs-theme="dark">
         <div class="container-fluid d-flex justify-content-evenly">
             <a class="navbar-brand" href="/"> <img style="translate: 0px 2.5px;" src="{{ url_for('static', filename='logo/Bootstrap_logo.png') }}" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
                 Bloglite</a>
@@ -34,6 +34,7 @@
                     <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
                     <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">New Post</a>
                     <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Account</a>
+                    <a class="nav-item nav-link" href="{{ url_for('users.user_posts', username=current_user.username) }}">My Profile</a>
                     <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
                     {% else %}
                     <a class="nav-item nav-link" href="/login">Login</a>

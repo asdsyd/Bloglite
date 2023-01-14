@@ -11,7 +11,7 @@ from bloglite.users.utils import save_picture
 
 users = Blueprint('users', __name__)
 
-
+# USER REGISTRATION PAGE
 @users.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -46,13 +46,13 @@ def login():
     return render_template('login.html', title='Login',
                            form=form)
 
-
+# USER LOGOUT
 @users.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('main.home'))
 
-
+# USER ACCOUNT PAGE
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
@@ -73,17 +73,17 @@ def account():
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
 
-
+# ALL POSTS OF A SPECIFIC USER
 @users.route("/user/<string:username>")
 def user_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     posts = Post.query.filter_by(author=user) \
         .order_by(Post.date_posted.desc()) \
-        .paginate(page=page, per_page=5)
+        .paginate(page=page, per_page=6)
     return render_template('user_posts.html', posts=posts, user=user)
 
-
+# USER PASSWORD RESET
 @users.route("/reset_password", methods=['GET', 'POST'])
 @login_required
 def reset_request():
@@ -97,7 +97,7 @@ def reset_request():
     return render_template('reset_request.html', title='Reset Password',
                            form=form)
 
-
+# USER FOLLOW UNFOLLOW ACTION
 @users.route('/follow/<int:user_id>/<action>')
 @login_required
 def follow(user_id, action):
@@ -110,7 +110,7 @@ def follow(user_id, action):
         db.session.commit()
     return redirect(request.referrer)
 
-
+# USER LIST OF FOLLOWING
 @users.route('/<int:user_id>/following')
 @login_required
 def following_list(user_id):
@@ -121,6 +121,7 @@ def following_list(user_id):
     return render_template('following_list.html', title='Following',
                            results=results)
 
+# USER LIST OF FOLLOWERS
 @users.route('/<int:user_id>/followers')
 @login_required
 def follower_list(user_id):
@@ -131,7 +132,7 @@ def follower_list(user_id):
     return render_template('follower_list.html', title='Followers',
                            results=results)
 
-
+# SEARCH FOR A USER
 @users.route('/search', methods=['GET'])
 @login_required
 def search():
@@ -140,7 +141,7 @@ def search():
     return render_template('search.html', title='Search',
                            users=users)
 
-
+# DELETE A USER
 @users.route("/delete/<int:id>")
 @login_required
 def delete_account(id):

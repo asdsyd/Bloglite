@@ -13,9 +13,12 @@
         </div>
         {% if post.author == current_user %}
                 <div>
-                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
-                        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
-                    </a>
+                    <a class="btn btn-secondary mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
+                        <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal" data-bs-target="#delModal">
+                        Delete
+                    </button>
+                
                 </div>
             {% endif %}
         </div>
@@ -30,6 +33,29 @@
         </div>
     </div>
 </article>
+
+<div>
+    <!-- Modal -->
+    <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Post?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    This will delete the selected post from the blog.
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" href="{{ url_for('posts.delete_post', post_id=post.id) }}" >Delete</a>
+                    <a class="btn btn-primary" href="#" data-bs-dismiss="modal" >Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

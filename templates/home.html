@@ -5,7 +5,7 @@
         <div class="container ">
             <img class="rounded-circle border border-primary dp m-2" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
             <div class="container">
-                <div class="container">
+                
                     <div class="row">
                         <div class="col">
                     <a class="mr-2 p-1 badge bg-primary text-wrap" style="width: 4rem; text-decoration: none;" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
@@ -23,7 +23,7 @@
                             <small class="text-muted ">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
                             </div>
                     </div>
-                </div>
+                
             </div>
             <div class="card " style="width: 28rem; border: 0" >
                 <img class="card-img-top" src="{{ url_for('static', filename='post_pics/' + post.image) }}" alt="Post Image">

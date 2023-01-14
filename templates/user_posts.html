@@ -1,71 +1,107 @@
+<!-- USER PROFILE PAGE -->
 {% extends "layout.html" %}
 {% block content %}
-<div class="container">
+
+<div class="container text-center">
     <div class="row">
-        <div class="col">
-            <h1 class="mb-3">Posts by {{ user.username }} ({{ posts.total }}) </h1>
-        </div>
-        <div class="col">
-            <img class="rounded-circle dp" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
-        </div>
-        <div class=" col">
-            <a href="{{ url_for('users.following_list', user_id=user.id) }}"> <h2>Following ({{ user.followed.count() }})</h2> </a>
-        </div>
-        <div class=" col">
-            <a href="{{ url_for('users.follower_list', user_id=user.id) }}"> <h2>Followers ({{ user.followers.count() }})</h2> </a>
+        <div class="col-4">
+            <img class="rounded-circle border border-primary  me-5 col g-col-3 mx-auto" style="max-width: 200px;max-height: 200px;" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+
         </div>
 
+        <div class="col-3">
+            <a class="btn btn-dark rounded-5" href="{{ url_for('users.following_list', user_id=user.id) }}">{{ user.followed.count() }} following</a>
+        </div>
+
+        <div class="col-3">
+            <a class="btn btn-dark rounded-5" href="{{ url_for('users.follower_list', user_id=user.id) }}">{{ user.followers.count() }} followers</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 ms-2">
+            <button type="button" class="btn btn-primary me-3 col g-col-6 mx-auto badge text-wrap rounded-5 ">{{user.username}}</button>
+        </div>
+        <div class="col-1">
+          
+        </div>
+        <div class="col-1">
+          
+        </div>
+      </div>
+
+
+
+
+
+<div>
+    <!-- FOLLOW/UNFOLLOW BUTTON TO BE DISPLAYED IF CURRENT USER IS NOT THE USER PROFILE -->
+{% if current_user.username != user.username %}
+<div class="container text-center">
+    <div class="row">
+    {% if current_user.is_following(user) %}
+    <div class="col align-self-center">
+        <a class=" btn btn-outline-danger rounded-5" href="{{ url_for('users.follow', user_id=user.id, action='unfollow') }}" role="button">Unfollow</a> 
+    </div>
+    {% else %}
+    <div class="col align-self-center">
+        <a class="btn btn-danger rounded-5 " href="{{ url_for('users.follow', user_id=user.id, action='follow') }}" role="button">Follow</a>
+    </div>
+    {% endif %}
     </div>
 </div>
-<div>
-{% if current_user.username != user.username %}
-    {% if current_user.is_following(user) %}
-    <button type="button" class="btn mr-2 p-1 badge btn-outline-danger text-wrap ">
-        <a class="link-danger" href="{{ url_for('users.follow', user_id=user.id, action='unfollow') }}" style="text-decoration: none;">Unfollow</a> </button>
-    {% else %}
-    <button type="button" class="btn mr-2 p-1 badge bg-danger text-wrap">
-        <a href="{{ url_for('users.follow', user_id=user.id, action='follow') }}" style="text-decoration: none; color: white;">Follow</a> </button>
-    {% endif %}
+
 {% else %}
-    <a class="btn mr-2 p-1 badge btn-warning text-wrap" href="{{ url_for('users.account') }}" role="button">edit profile</a>
+<div class="row justify-content-evenly p-2">
+    <div class="col-2">
+        <a class="btn btn-primary rounded-5 " href="{{ url_for('posts.new_post') }}" role="button">new post</a>
+    </div>
+    <div class="col-2">
+        <a class="btn btn-danger rounded-5 " href="{{ url_for('users.account') }}" role="button">edit profile</a>
+    </div>
+    
 {% endif %}
 </div>
 
+<div class="pt-2">
+    <h6 class="text-center ">Posts: {{ posts.total }}</h6>  
+</div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4 p-4 m-4 ">
+<!-- RENDERING ALL THE POSTS BY THE USER -->
+<div class="row row-cols-1 row-cols-md-3 g-4 p-1 m-2 ">
 {% for post in posts %}
 
     <div class="col">
-        <div class="card h-100">
+        <div class="card border-info mb-3 h-100" style="max-width: 18rem;">
             <img src="{{ url_for('static', filename='post_pics/' + post.image) }}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{ post.title }}</h5>
                 <p class="card-text">{{ post.content }}</p>
+            </div>
+            <div class="card-footer text-muted text-center">
+                {{ post.date_posted.strftime('%d-%m-%Y') }}
             </div>
         </div>
     </div>
 
 
     {% endfor %}
-</div>
 
+    <!-- PAGINATION -->
+</div>
+<div class="m-3 ms-5">
     {% for page_num in posts.iter_pages(left_edge=1, right_edge=1,
     left_current=1, right_current=1) %}
         {% if page_num %}
-<div class="m-2">
+
             {% if posts.page == page_num %}
-                <a class="btn btn-outline-info btn-sm" href="{{ url_for('users.user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                <a class="btn btn-primary m-1" href="{{ url_for('users.user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
             {% else %}
-                <a class="btn btn-outline-info m-2" href="{{ url_for('users.user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
-</div>
+                <a class="btn btn-outline-info m-1" href="{{ url_for('users.user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
+
             {% endif %}
         {% else %}
         ...
         {% endif %}
     {% endfor %}
+</div>  
 {% endblock content %}
-
-<div class="article-metadata">
-    <a class="mr-2 p-1 badge bg-primary text-wrap" style="width: 4rem ; text-decoration: none;" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
-    <small class="text-muted text-end">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-</div>
